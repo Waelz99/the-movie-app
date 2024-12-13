@@ -1,22 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
-import { MoviesService } from './movies.service';
 
-describe('AppController', () => {
-  let appController: MoviesController;
+describe('MoviesController', () => {
+  let controller: MoviesController;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       controllers: [MoviesController],
-      providers: [MoviesService],
     }).compile();
 
-    appController = app.get<MoviesController>(MoviesController);
+    controller = module.get<MoviesController>(MoviesController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 });
