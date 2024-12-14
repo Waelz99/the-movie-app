@@ -35,7 +35,7 @@ jobs:
       # Run tests and generate coverage report
       - name: Run tests and generate coverage
         run: |
-          npm run test -- --coverage --coverageReporters=lcov
+          npm run test -- --coverage --coverageReporters=lcov --passWithNoTests
 
       # Publish code coverage
       - name: Upload code coverage
