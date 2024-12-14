@@ -6,15 +6,15 @@ import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 import { TmdbModule } from './tmdb/tmdb.module';
 import { TmdbService } from './tmdb/tmdb.service';
-import { TMDBHelpers } from './helpers/tmdb-helpers';
+import { TMDBHelpers } from './tmdb/helpers/tmdb-helpers';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(moviesOrmConfig),
     TypeOrmModule.forFeature([Movie]),
-    TmdbModule,
     ScheduleModule.forRoot(),
+    TmdbModule,
   ],
   controllers: [MoviesController],
   providers: [MoviesService, TmdbService, TMDBHelpers],

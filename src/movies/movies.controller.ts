@@ -3,6 +3,11 @@ import { MoviesService } from './movies.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetMoviesDto } from './dto/get-movies-dto';
 
+/**
+ * MoviesController - Available endpoints:
+ * /movies - Get All movies with filters and pagination.
+ * /movies/:id - Get movie's details given specific id
+ */
 @ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
