@@ -25,7 +25,7 @@ export class Movie {
     example: 'Red One',
     description: 'The original title of the movie',
   })
-  originalTitle: string;
+  original_title: string;
 
   @Column({ type: 'text', nullable: true })
   @ApiProperty({
@@ -42,7 +42,7 @@ export class Movie {
     description: 'The path to the movie poster image',
     nullable: true,
   })
-  posterPath?: string;
+  poster_path?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({
@@ -50,7 +50,7 @@ export class Movie {
     description: 'The path to the movie backdrop image',
     nullable: true,
   })
-  backdropPath?: string;
+  backdrop_path?: string;
 
   @Column({ type: 'boolean', default: false, nullable: true })
   @ApiProperty({
@@ -64,7 +64,7 @@ export class Movie {
     example: 'en',
     description: 'The original language of the movie',
   })
-  originalLanguage: string;
+  original_language: string;
 
   @Column({ type: 'simple-array', nullable: true })
   @ApiProperty({
@@ -72,7 +72,7 @@ export class Movie {
     description: 'An array of genre IDs associated with the movie',
     nullable: true,
   })
-  genreIds?: number[];
+  genre_ids?: number[];
 
   @Column({
     type: 'decimal',
@@ -93,7 +93,7 @@ export class Movie {
     description: 'The release date of the movie',
     nullable: true,
   })
-  releaseDate?: string;
+  release_date?: string;
 
   @CreateDateColumn({ nullable: true })
   @ApiProperty({
