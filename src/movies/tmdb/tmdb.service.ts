@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TMDBHelpers } from '../helpers/tmdb-helpers';
+import { TMDBHelpers } from './helpers/tmdb-helpers';
 import { Movie } from '../entities/movie.entity';
 
 @Injectable()
