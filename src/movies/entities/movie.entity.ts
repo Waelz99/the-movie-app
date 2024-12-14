@@ -16,11 +16,11 @@ export class Movie {
   })
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({ example: 'Red One', description: 'The title of the movie' })
   title: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({
     example: 'Red One',
     description: 'The original title of the movie',
@@ -52,14 +52,14 @@ export class Movie {
   })
   backdropPath?: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, nullable: true })
   @ApiProperty({
     example: false,
     description: 'Indicates whether the movie is for adults only',
   })
   adult: boolean;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, nullable: true })
   @ApiProperty({
     example: 'en',
     description: 'The original language of the movie',
@@ -74,7 +74,13 @@ export class Movie {
   })
   genreIds?: number[];
 
-  @Column({ type: 'decimal', precision: 10, scale: 6, default: 0 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 6,
+    default: 0,
+    nullable: true,
+  })
   @ApiProperty({
     example: 1231.712,
     description: 'The popularity score of the movie',
@@ -89,14 +95,14 @@ export class Movie {
   })
   releaseDate?: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: true })
   @ApiProperty({
     example: '2024-12-10T23:59:59.999Z',
     description: 'The date the movie record was created',
   })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ nullable: true })
   @ApiProperty({
     example: '2024-12-11T23:59:59.999Z',
     description: 'The date the movie record was last updated',
