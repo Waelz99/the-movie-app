@@ -18,6 +18,50 @@ export class MoviesService {
     private readonly tmdbService: TmdbService,
   ) {}
 
+  /**
+   * Retrieve movies page from the database.
+   * @param page the requested page to be retrieved from the database.
+   * @param limit the maximum number of rows to be retrieved.
+   * @param sortBy the column to sort the result.
+   * @param search if specified, search by movie title.
+   * @returns Movies page.
+   */
+  async getMovies(
+    page: number = 1,
+    limit: number = 25,
+    sortBy: string = 'popularity',
+    search?: string,
+  ): Promise<any> {
+    const queryBuilder = this.movieRepository.createQueryBuilder('movie');
+
+    // Searching by movie title
+    if (search) {
+      queryBuilder.andWhere('movie.title LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    // Sorting by specified field (popularity, release_date, etc.)
+    if (sortBy) {
+      queryBuilder.orderBy(`movie.${sortBy}`, 'DESC');
+    }
+
+    // Apply pagination
+    const [movies, total] = await queryBuilder
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    // Return the paginated result
+    return {
+      page,
+      limit,
+      total_results: total,
+      total_pages: Math.ceil(total / limit),
+      movies,
+    };
+  }
+
   /*
     TMDB related functions, responsible for retrieving TMDB data periodically.
     To keep MoviesDB in sync with TMDB APIs.
