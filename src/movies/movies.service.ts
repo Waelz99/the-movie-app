@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { TmdbService } from './tmdb/tmdb.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,6 +60,23 @@ export class MoviesService {
       total_pages: Math.ceil(total / limit),
       movies,
     };
+  }
+
+  /**
+   * Get movie details by movieId
+   * @param movieId the id of the requested movie
+   * @returns requested movie's details
+   */
+  async getMovieDetails(movieId: number): Promise<Movie> {
+    const movie = await this.movieRepository.findOne({
+      where: { id: movieId },
+    });
+
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID ${movieId} not found`);
+    }
+
+    return movie;
   }
 
   /*
