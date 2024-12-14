@@ -90,7 +90,14 @@ export class MoviesService {
   async syncWithTMDBInternal() {
     const moviesList = await this.tmdbService.syncWithTMDB();
     this.movieRepository.clear();
-    this.movieRepository.save(moviesList);
+    await this.movieRepository
+      .createQueryBuilder()
+      .insert()
+      .orIgnore(true)
+      .into(Movie)
+      .values(moviesList)
+      .updateEntity(false)
+      .execute();
   }
 
   /**
