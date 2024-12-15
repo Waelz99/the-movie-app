@@ -6,10 +6,12 @@ import {
   PrimaryColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Genre } from './genre.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Rating } from 'src/ratings/entities/rating.entity';
 
 @Entity('movies')
 export class Movie {
@@ -28,7 +30,10 @@ export class Movie {
   genres: Genre[];
 
   @ManyToMany(() => User, (user) => user.watchlist)
-  users: User[];
+  watchlist: User[];
+
+  @OneToMany(() => Rating, (rating) => rating.movie)
+  ratings: Rating[];
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({ example: 'Red One', description: 'The title of the movie' })

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movie.entity';
 import { In, Repository } from 'typeorm';
 import { Genre } from './entities/genre.entity';
+import { RatingsService } from 'src/ratings/ratings.service';
 
 @Injectable()
 export class MoviesService {
@@ -19,6 +20,7 @@ export class MoviesService {
     @InjectRepository(Genre)
     private readonly genreRepository: Repository<Genre>,
     private readonly tmdbService: TmdbService,
+    private readonly ratingsService: RatingsService,
   ) {}
 
   /**
@@ -81,6 +83,12 @@ export class MoviesService {
       .take(limit)
       .getManyAndCount();
 
+    for (const movie of movies) {
+      movie['averageRating'] = await this.ratingsService.getAverageRating(
+        movie.id,
+      );
+    }
+
     // Return the paginated result
     return {
       page,
@@ -104,6 +112,10 @@ export class MoviesService {
     if (!movie) {
       throw new NotFoundException(`Movie with ID ${movieId} not found`);
     }
+
+    movie['averageRating'] = await this.ratingsService.getAverageRating(
+      movie.id,
+    );
 
     return movie;
   }
