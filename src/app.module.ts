@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WatchlistsModule } from './watchlists/watchlists.module';
 import { RatingsModule } from './ratings/ratings.module';
+import { RedisModule } from './redis/redis.module';
 import postgresOrmConfig from './config/postgres.db.config';
 
 @Module({
@@ -15,6 +16,7 @@ import postgresOrmConfig from './config/postgres.db.config';
     UsersModule,
     WatchlistsModule,
     RatingsModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
