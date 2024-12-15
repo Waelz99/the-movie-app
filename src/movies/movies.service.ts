@@ -1,3 +1,4 @@
+import { RedisService } from './../redis/redis.service';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { TmdbService } from './tmdb/tmdb.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -21,6 +22,7 @@ export class MoviesService {
     private readonly genreRepository: Repository<Genre>,
     private readonly tmdbService: TmdbService,
     private readonly ratingsService: RatingsService,
+    private readonly redisService: RedisService,
   ) {}
 
   /**
@@ -38,6 +40,15 @@ export class MoviesService {
     search?: string,
     genres?: string[], // Add genres as an optional filter
   ): Promise<any> {
+    const cacheKey = `getMovies|${page}|${limit}|${sortBy}|${search}|${genres.toString()}`;
+
+    const cacheHit = await this.redisService.getCache(cacheKey);
+
+    if (cacheHit) {
+      Logger.log('Cache hit');
+      return cacheHit;
+    }
+
     const queryBuilder = this.movieRepository.createQueryBuilder('movie');
 
     // Searching by movie title
@@ -89,14 +100,18 @@ export class MoviesService {
       );
     }
 
-    // Return the paginated result
-    return {
+    const result = {
       page,
       limit,
       total_results: total,
       total_pages: Math.ceil(total / limit),
       movies,
     };
+
+    await this.redisService.setCache(cacheKey, JSON.stringify(result), 1800);
+
+    // Return the paginated result
+    return result;
   }
 
   /**
@@ -105,6 +120,15 @@ export class MoviesService {
    * @returns requested movie's details
    */
   async getMovieDetails(movieId: number): Promise<Movie> {
+    const cacheKey = `getMovieDetails|${movieId}`;
+
+    const cacheHit = await this.redisService.getCache(cacheKey);
+
+    if (cacheHit) {
+      Logger.log('Cache hit');
+      return cacheHit;
+    }
+
     const movie = await this.movieRepository.findOne({
       where: { id: movieId },
     });
@@ -116,6 +140,8 @@ export class MoviesService {
     movie['averageRating'] = await this.ratingsService.getAverageRating(
       movie.id,
     );
+
+    this.redisService.setCache(cacheKey, JSON.stringify(movie), 1800);
 
     return movie;
   }
