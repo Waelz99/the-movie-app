@@ -34,6 +34,7 @@ export class MoviesService {
     limit: number = 25,
     sortBy: string = 'popularity',
     search?: string,
+    genres?: string[], // Add genres as an optional filter
   ): Promise<any> {
     const queryBuilder = this.movieRepository.createQueryBuilder('movie');
 
@@ -42,6 +43,31 @@ export class MoviesService {
       queryBuilder.andWhere('movie.title LIKE :search', {
         search: `%${search}%`,
       });
+    }
+
+    // Filtering by genres
+    if (genres && genres.length > 0) {
+      if (typeof genres === 'string') {
+        queryBuilder
+          .innerJoin('movie.genres', 'genre')
+          .andWhere('LOWER(genre.name) = :genre', {
+            genre: (genres as string).toLowerCase(),
+          })
+          .groupBy('movie.id')
+          .having('COUNT(genre.id) >= :genreCount', {
+            genreCount: 1,
+          });
+      } else {
+        queryBuilder
+          .innerJoin('movie.genres', 'genre')
+          .andWhere('LOWER(genre.name) IN (:...genres)', {
+            genres: genres.map((genre) => genre.toLowerCase()),
+          })
+          .groupBy('movie.id')
+          .having('COUNT(genre.id) >= :genreCount', {
+            genreCount: genres.length,
+          });
+      }
     }
 
     // Sorting by specified field (popularity, release_date, etc.)
