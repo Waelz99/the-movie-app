@@ -76,14 +76,6 @@ export class Movie {
   })
   original_language: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  @ApiProperty({
-    example: [35, 28, 14],
-    description: 'An array of genre IDs associated with the movie',
-    nullable: true,
-  })
-  genre_ids?: number[];
-
   @Column({
     type: 'decimal',
     precision: 10,
@@ -118,4 +110,6 @@ export class Movie {
     description: 'The date the movie record was last updated',
   })
   updatedAt: Date;
+
+  genre_ids?: number[];
 }
