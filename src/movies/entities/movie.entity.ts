@@ -4,8 +4,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { Genre } from './genre.entity';
 
 @Entity('movies')
 export class Movie {
@@ -15,6 +18,13 @@ export class Movie {
     description: 'The unique ID of the movie in the database',
   })
   id: number;
+
+  @ManyToMany(() => Genre, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinTable()
+  genres: Genre[];
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({ example: 'Red One', description: 'The title of the movie' })
