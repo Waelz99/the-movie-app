@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { WatchlistsModule } from './watchlists/watchlists.module';
 import postgresOrmConfig from './config/postgres.db.config';
 
 @Module({
@@ -11,6 +12,7 @@ import postgresOrmConfig from './config/postgres.db.config';
     TypeOrmModule.forRoot(postgresOrmConfig),
     MoviesModule,
     UsersModule,
+    WatchlistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
