@@ -3,7 +3,8 @@ import { TmdbService } from './tmdb/tmdb.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movie.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { Genre } from './entities/genre.entity';
 
 @Injectable()
 export class MoviesService {
@@ -15,6 +16,8 @@ export class MoviesService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
+    @InjectRepository(Genre)
+    private readonly genreRepository: Repository<Genre>,
     private readonly tmdbService: TmdbService,
   ) {}
 
@@ -88,16 +91,60 @@ export class MoviesService {
    * Retrieves TMDB data from TMDB APIs and insert it in MoviesRepository
    */
   async syncWithTMDBInternal() {
-    const moviesList = await this.tmdbService.syncWithTMDB();
-    this.movieRepository.clear();
-    await this.movieRepository
+    const { movies, genres } = await this.tmdbService.syncWithTMDB();
+
+    await this.clearTables();
+
+    await this.genreRepository
       .createQueryBuilder()
       .insert()
       .orIgnore(true)
-      .into(Movie)
-      .values(moviesList)
+      .into(Genre)
+      .values(genres)
       .updateEntity(false)
       .execute();
+
+    const filteredMovies: Movie[] = this.filterDuplicateMovies(movies);
+
+    const moviesWithGenre: Movie[] =
+      await this.enrichMoviesWithGenres(filteredMovies);
+
+    await this.movieRepository.save(moviesWithGenre);
+  }
+
+  async clearTables() {
+    await this.movieRepository.query('TRUNCATE TABLE movies CASCADE');
+
+    await this.genreRepository.query('TRUNCATE TABLE genres CASCADE');
+  }
+
+  filterDuplicateMovies(movies: Movie[]): Movie[] {
+    const seenIds = new Set<number>();
+
+    return movies.filter((movie) => {
+      if (seenIds.has(movie.id)) {
+        return false;
+      } else {
+        seenIds.add(movie.id);
+        return true;
+      }
+    });
+  }
+
+  async enrichMoviesWithGenres(movies: Movie[]): Promise<Movie[]> {
+    const moviesWithGenre: Movie[] = [];
+
+    for (const movie of movies) {
+      const movieGenres = await this.genreRepository.findBy({
+        id: In(movie.genre_ids),
+      });
+
+      movie.genres = movieGenres;
+
+      moviesWithGenre.push(movie);
+    }
+
+    return moviesWithGenre;
   }
 
   /**

@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
+import { Genre } from 'src/movies/entities/genre.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { User } from 'src/users/entities/user.entity';
 
@@ -12,7 +13,7 @@ const postgresOrmConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  entities: [Movie, User],
+  entities: [Movie, User, Genre],
   synchronize: process.env.NODE_ENV !== 'production',
 };
 
