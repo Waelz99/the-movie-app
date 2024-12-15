@@ -7,10 +7,11 @@ import { TmdbModule } from './tmdb/tmdb.module';
 import { TmdbService } from './tmdb/tmdb.service';
 import { TMDBHelpers } from './tmdb/helpers/tmdb-helpers';
 import { ScheduleModule } from '@nestjs/schedule';
+import { Genre } from './entities/genre.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Movie]),
+    TypeOrmModule.forFeature([Movie, Genre]),
     ScheduleModule.forRoot(),
     TmdbModule,
   ],
