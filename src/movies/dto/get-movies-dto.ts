@@ -49,7 +49,7 @@ export class GetMoviesDto {
   @ApiPropertyOptional({
     description: 'Optional list of genres associated with the movie',
     type: [String],
-    example: ['Action', 'Adventure', 'Drama'],
+    example: ['Action', 'Adventure'],
   })
   @IsOptional()
   @IsArray({ message: 'Genres must be an array of strings' })
