@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Genre } from './genre.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity('movies')
 export class Movie {
@@ -25,6 +26,9 @@ export class Movie {
   })
   @JoinTable()
   genres: Genre[];
+
+  @ManyToMany(() => User, (user) => user.watchlist)
+  users: User[];
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   @ApiProperty({ example: 'Red One', description: 'The title of the movie' })
