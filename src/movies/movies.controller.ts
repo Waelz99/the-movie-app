@@ -22,8 +22,8 @@ export class MoviesController {
     description: 'Successfully fetched the list of movies',
   })
   async getMovies(@Query() query: GetMoviesDto): Promise<any> {
-    const { page, limit, sortBy, search } = query;
-    return this.movieService.getMovies(page, limit, sortBy, search);
+    const { page, limit, sortBy, search, genres } = query;
+    return this.movieService.getMovies(page, limit, sortBy, search, genres);
   }
 
   @Get(':id')

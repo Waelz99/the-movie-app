@@ -1,5 +1,12 @@
-import { IsOptional, IsString, IsInt, Min, IsIn } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsOptional,
+  IsString,
+  IsInt,
+  Min,
+  IsIn,
+  IsArray,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetMoviesDto {
   @ApiProperty({
@@ -33,10 +40,19 @@ export class GetMoviesDto {
 
   @ApiProperty({
     description: 'Search query for movie title',
-    example: 'Inception',
     required: false,
   })
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional({
+    description: 'Optional list of genres associated with the movie',
+    type: [String],
+    example: ['Action', 'Adventure', 'Drama'],
+  })
+  @IsOptional()
+  @IsArray({ message: 'Genres must be an array of strings' })
+  @IsString({ each: true, message: 'Each genre must be a string' })
+  genres?: string[];
 }
