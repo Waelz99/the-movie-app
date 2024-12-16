@@ -1,14 +1,9 @@
 // rate.controller.ts
 import { Controller, Post, Delete, Get, Param, Body } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiBody,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Rating } from './entities/rating.entity';
 import { RatingsService } from './ratings.service';
+import { AddRatingDto } from './dto/add-rating.dto';
 
 @ApiTags('Ratings')
 @Controller('movies/:movieId/ratings')
@@ -28,10 +23,6 @@ export class RatingsController {
     description: 'The ID of the movie being rated',
     type: Number,
   })
-  @ApiBody({
-    description: 'Rating value to assign to the movie',
-    type: Number,
-  })
   @ApiResponse({
     status: 200,
     description: 'Rating added or updated successfully',
@@ -44,9 +35,9 @@ export class RatingsController {
   async addRating(
     @Param('userId') userId: number,
     @Param('movieId') movieId: number,
-    @Body('ratingValue') ratingValue: number,
+    @Body() addRatingDto: AddRatingDto,
   ) {
-    return this.ratingsService.addRating(userId, movieId, ratingValue);
+    return this.ratingsService.addRating(userId, movieId, addRatingDto);
   }
 
   // Remove a rating for a movie
