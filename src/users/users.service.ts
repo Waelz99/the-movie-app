@@ -73,7 +73,7 @@ export class UsersService {
     return { token: token, id: user.id };
   }
 
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: number): Promise<any> {
     const user = await this.userRepository.findOne({
       where: { id },
     });
@@ -81,7 +81,11 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return user;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+
+    return userWithoutPassword;
   }
 
   /**

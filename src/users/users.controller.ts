@@ -68,7 +68,7 @@ export class UsersController {
     status: 404,
     description: 'User not found',
   })
-  async getUser(@Param('id') id: number): Promise<User> {
+  async getUser(@Param('id') id: number): Promise<any> {
     return this.usersService.getUserById(id);
   }
 
@@ -87,8 +87,8 @@ export class UsersController {
   async updateUser(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
-    return this.usersService.updateUser(id, updateUserDto);
+  ): Promise<void> {
+    this.usersService.updateUser(id, updateUserDto);
   }
 
   // Delete user by ID
