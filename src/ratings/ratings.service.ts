@@ -5,6 +5,7 @@ import { Movie } from 'src/movies/entities/movie.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Rating } from './entities/rating.entity';
+import { AddRatingDto } from './dto/add-rating.dto';
 
 @Injectable()
 export class RatingsService {
@@ -21,7 +22,7 @@ export class RatingsService {
   async addRating(
     userId: number,
     movieId: number,
-    ratingValue: number,
+    addRatingDto: AddRatingDto,
   ): Promise<Rating> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
@@ -38,6 +39,8 @@ export class RatingsService {
     let rating = await this.ratingRepository.findOne({
       where: { userId, movieId },
     });
+
+    const { ratingValue } = addRatingDto;
 
     if (rating) {
       // If rating exists, update it

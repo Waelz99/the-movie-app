@@ -8,6 +8,7 @@ export function initSwagger(app: INestApplication) {
     .setDescription(
       'CRUD (Create, Read, Update, Delete) application that consumes the TMDB APIs.',
     )
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
