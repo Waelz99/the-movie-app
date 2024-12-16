@@ -24,6 +24,6 @@ import { BearerAuthMiddleware } from './middlewares/bearer-auth.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(BearerAuthMiddleware).forRoutes('movies');
+    consumer.apply(BearerAuthMiddleware).forRoutes('movies', 'users/:userId');
   }
 }
