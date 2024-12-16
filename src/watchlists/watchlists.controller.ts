@@ -1,7 +1,8 @@
 import { Controller, Param, Post, Delete, Get } from '@nestjs/common';
 import { WatchlistsService } from './watchlists.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('Watchlist')
 @Controller('users/:userId/watchlist')
 export class WatchlistsController {

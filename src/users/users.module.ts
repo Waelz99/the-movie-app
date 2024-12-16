@@ -15,6 +15,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, JwtModule],
 })
 export class UsersModule {}

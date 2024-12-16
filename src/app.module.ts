@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
@@ -8,6 +8,7 @@ import { WatchlistsModule } from './watchlists/watchlists.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { RedisModule } from './redis/redis.module';
 import postgresOrmConfig from './config/postgres.db.config';
+import { BearerAuthMiddleware } from './middlewares/bearer-auth.middleware';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import postgresOrmConfig from './config/postgres.db.config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(BearerAuthMiddleware).forRoutes('movies', 'users/:userId');
+  }
+}

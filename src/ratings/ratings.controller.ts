@@ -1,10 +1,17 @@
 // rate.controller.ts
 import { Controller, Post, Delete, Get, Param, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { Rating } from './entities/rating.entity';
 import { RatingsService } from './ratings.service';
 import { AddRatingDto } from './dto/add-rating.dto';
 
+@ApiBearerAuth()
 @ApiTags('Ratings')
 @Controller('movies/:movieId/ratings')
 export class RatingsController {
