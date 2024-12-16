@@ -23,7 +23,7 @@ export class RatingsService {
     userId: number,
     movieId: number,
     addRatingDto: AddRatingDto,
-  ): Promise<Rating> {
+  ): Promise<void> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -45,7 +45,8 @@ export class RatingsService {
     if (rating) {
       // If rating exists, update it
       rating.ratingValue = ratingValue;
-      return this.ratingRepository.save(rating);
+      this.ratingRepository.save(rating);
+      return;
     }
 
     // If no rating exists, create a new one
@@ -57,7 +58,7 @@ export class RatingsService {
       movie,
     });
 
-    return this.ratingRepository.save(rating);
+    this.ratingRepository.save(rating);
   }
 
   // Remove a rating for a movie
