@@ -64,6 +64,10 @@ Files structure:
 - README.md: Contains project documentation.
 - .gitignore: Specifies files to ignore in version control.
 
+## Database
+Database is build using `PostgreSQL` which is a SQL structured database:
+![image](https://github.com/user-attachments/assets/fd1cf9f0-d942-4ae2-bc3e-02f32228da7b)
+
 ## Project modules
 The project has 7 modules, each one is responsible for sub-part of the project
 ![image](https://github.com/user-attachments/assets/2b9f1f88-9a12-4244-8a65-dc6df8c39dbe)
