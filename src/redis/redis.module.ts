@@ -12,5 +12,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     }),
   ],
   providers: [RedisService],
+  exports: [RedisService, CacheModule],
 })
 export class RedisModule {}

@@ -10,5 +10,6 @@ import { TMDBHelpers } from './helpers/tmdb-helpers';
     }),
   ],
   providers: [TmdbService, TMDBHelpers],
+  exports: [TmdbService, TMDBHelpers, ConfigModule],
 })
 export class TmdbModule {}
